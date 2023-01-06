@@ -5,6 +5,7 @@ defmodule GithubBrowserLiveWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
+    plug Phoenix.LiveView.Flash #  not sure if it's needed
     plug :put_root_layout, {GithubBrowserLiveWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
@@ -13,6 +14,14 @@ defmodule GithubBrowserLiveWeb.Router do
   pipeline :api do
     plug :accepts, ["json"]
   end
+
+#  scope "/", LiveViewStudioWeb do
+#    pipe_through :browser
+#
+#
+#    live "/", PageLive
+#    live "/light", LightLive
+#  end
 
   scope "/", GithubBrowserLiveWeb do
     pipe_through :browser
