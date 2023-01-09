@@ -1,4 +1,9 @@
 <%= if @current_user do %>
+  <li><%= link "Home", to: "/" %></li>
+  <li><%= link "Guess", to: "/guess" %></li>
+  <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
+    <li><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></li>
+  <% end %>
   <li><%= link "Settings", to: Routes.user_settings_path(@conn, :edit) %></li>
   <li><%= link "Log out", to: Routes.user_session_path(@conn, :delete), method: :delete %></li>
 <% else %>
@@ -8,6 +13,6 @@
 
 <%= if @current_user do %>
 <ul>
-<li><%= @current_user.email %></li>
+  <li><%= @current_user.email %></li>
 </ul>
 <% end %>
