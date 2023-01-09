@@ -32,3 +32,7 @@ github_browser_live-*.tar
 npm-debug.log
 /assets/node_modules/
 
+
+.idea/
+
+github_browser_live.iml

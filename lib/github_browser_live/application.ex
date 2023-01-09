@@ -9,7 +9,7 @@ defmodule GithubBrowserLive.Application do
   def start(_type, _args) do
     children = [
       # Start the Ecto repository
-#      GithubBrowserLive.Repo,
+      GithubBrowserLive.Repo,
       # Start the Telemetry supervisor
       GithubBrowserLiveWeb.Telemetry,
       # Start the PubSub system
