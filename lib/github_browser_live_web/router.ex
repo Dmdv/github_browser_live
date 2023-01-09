@@ -26,6 +26,7 @@ defmodule GithubBrowserLiveWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    live "/guess", WrongLive
   end
 
   # Other scopes may use custom stacks.
