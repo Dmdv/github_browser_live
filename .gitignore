@@ -36,3 +36,5 @@ npm-debug.log
 .idea/
 
 github_browser_live.iml
+
+.DS_Store

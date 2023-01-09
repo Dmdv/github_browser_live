@@ -5,7 +5,7 @@ config :github_browser_live, GithubBrowserLive.Repo,
   username: "postgres",
   password: "postgres",
   hostname: "localhost",
-  database: "github_browser_live_dev",
+  database: "github_browser",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
