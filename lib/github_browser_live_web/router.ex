@@ -22,6 +22,7 @@ defmodule GithubBrowserLiveWeb.Router do
 
     get "/", PageController, :index
     live "/guess", WrongLive
+    live "/search", SearchLive
   end
 
   # Other scopes may use custom stacks.

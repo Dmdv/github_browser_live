@@ -1,0 +1,30 @@
+<form phx-change="github_search">
+    <fieldset>
+        <label for="nameField">Repo</label>
+            <input type="text" name="name" value="<%= @name %>"
+                   placeholder="e.g. FRA"
+                   autofocus autocomplete="off" />
+
+        <input class="button-primary" type="submit" value="Search Repos">
+    </fieldset>
+</form>
+
+<%= unless @repos == [] do %>
+<h2>Search Results</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Repo name</th>
+        <th>Link</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%= for repo <- @repos do %>
+    <tr>
+        <td><%= repo.name %></td>
+        <td><%= repo.link %></td>
+    </tr>
+    <% end %>
+    </tbody>
+</table>
+<% end %>
