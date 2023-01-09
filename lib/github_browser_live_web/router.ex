@@ -14,14 +14,6 @@ defmodule GithubBrowserLiveWeb.Router do
     plug :accepts, ["json"]
   end
 
-#  scope "/", LiveViewStudioWeb do
-#    pipe_through :browser
-#
-#
-#    live "/", PageLive
-#    live "/light", LightLive
-#  end
-
   scope "/", GithubBrowserLiveWeb do
     pipe_through :browser
 
