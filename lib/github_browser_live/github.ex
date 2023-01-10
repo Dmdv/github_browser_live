@@ -32,7 +32,13 @@ defmodule GithubBrowserLive.GitHub do
   end
 
   def array_to_dict(array) do
-    Enum.map(array, fn repo -> %{name: repo["name"], link: repo["html_url"]} end)
+    array
+    |> Enum.map(fn repo ->
+      %{
+        name: repo["name"],
+        link: repo["html_url"],
+      }
+    end)
   end
 
   def dict_to_atoms(dict) do
@@ -51,7 +57,7 @@ defmodule GithubBrowserLive.GitHub do
   def process_response_body(body) do
     body
     |> Poison.decode!
-    |> Enum.map(fn({k, v}) -> {String.to_atom(k), v} end)
+    |> dict_to_atoms
   end
 
   def list_demo do
