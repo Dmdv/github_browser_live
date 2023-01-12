@@ -23,7 +23,7 @@
     <%= for repo <- @repos do %>
     <tr>
         <td><%= repo.name %></td>
-        <td><%= link repo.link, to: repo.link %></td>
+        <td><%= link repo.link, to: repo.link, target: "_blank" %></td>
     </tr>
     <% end %>
     </tbody>
