@@ -3,9 +3,10 @@
         <label for="nameField">Repo</label>
             <input type="text" name="name" value="<%= @name %>"
                    placeholder="e.g. FRA"
-                   autofocus autocomplete="off" />
+                   autofocus autocomplete="off" phx-debounce="500" />
 
         <input class="button-primary" type="submit" value="Search Repos">
+        <input class="button-primary" type="submit" value="Clear">
     </fieldset>
 </form>
 
@@ -22,7 +23,7 @@
     <%= for repo <- @repos do %>
     <tr>
         <td><%= repo.name %></td>
-        <td><%= repo.link %></td>
+        <td><%= link repo.link, to: repo.link %></td>
     </tr>
     <% end %>
     </tbody>

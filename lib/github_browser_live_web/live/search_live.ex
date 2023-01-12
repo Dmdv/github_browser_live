@@ -17,11 +17,26 @@ defmodule GithubBrowserLiveWeb.SearchLive do
         socket
       ) do
 
-    socket =
-      socket
-      |> assign(:name, name)
-      |> assign(:repos, GitHub.search_by_name(name))
-
-    {:noreply, socket}
+    if name == nil do
+      socket =
+        socket
+        |> assign(:name, "")
+        |> assign(:repos, [])
+      {:noreply, socket}
+    else
+      socket =
+        socket
+        |> assign(:name, name)
+        |> assign(:repos, GitHub.search_by_name(name))
+      {:noreply, socket}
+    end
   end
+
+  # Add a handle_info function to receive the message and clear flash after a 5 second delay
+
+  def handle_info(:schedule_clear_flash, socket) do
+    :timer.sleep(5000)
+    {:noreply, clear_flash(socket)}
+  end
+
 end

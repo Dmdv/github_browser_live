@@ -28,10 +28,10 @@ defmodule GithubBrowserLive.GitHub do
   def repos_name_url(name, per_page \\ 5, page \\ 1, order \\ "desc")
       when order in ["desc", "asc"] do
     repos(name, per_page, page, order)
-    |> array_to_dict
+    |> select_name_and_url
   end
 
-  def array_to_dict(array) do
+  def select_name_and_url(array) do
     array
     |> Enum.map(fn repo ->
       %{
@@ -39,10 +39,6 @@ defmodule GithubBrowserLive.GitHub do
         link: repo["html_url"],
       }
     end)
-  end
-
-  def dict_to_atoms(dict) do
-    Enum.map(dict, fn {k, v} -> {String.to_atom(k), v} end)
   end
 
   def repos(name, per_page \\ 5, page \\ 1, order \\ "desc")
@@ -69,6 +65,12 @@ defmodule GithubBrowserLive.GitHub do
       %{name: "Dortmund", link: "DTM"},
       %{name: "Dertmund", link: "DEM"},
     ]
+  end
+
+  ## Helpers
+
+  def dict_to_atoms(dict) do
+    Enum.map(dict, fn {k, v} -> {String.to_atom(k), v} end)
   end
 
 end
