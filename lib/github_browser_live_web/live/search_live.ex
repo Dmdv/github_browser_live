@@ -1,6 +1,7 @@
 defmodule GithubBrowserLiveWeb.SearchLive do
   use GithubBrowserLiveWeb, :live_view
   alias GithubBrowserLive.GitHub
+  require Logger
 
   def mount(_params, _session, socket) do
     socket =
@@ -9,6 +10,24 @@ defmodule GithubBrowserLiveWeb.SearchLive do
       |> assign(:repos, [])
 
     {:ok, socket}
+  end
+
+  def handle_event(
+        "like_repo",
+        %{"id" => id},
+        socket) do
+    Logger.info("Liked " + id)
+    {:noreply, socket
+               |> put_flash(:info, "repo liked")}
+  end
+
+  def handle_event(
+        "unlike_repo",
+        %{"id" => id},
+        socket) do
+    Logger.info("Unliked " + id)
+    {:noreply, socket
+               |> put_flash(:info, "repo unliked")}
   end
 
   def handle_event(

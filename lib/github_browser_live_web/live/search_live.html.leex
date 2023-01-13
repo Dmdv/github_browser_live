@@ -2,11 +2,10 @@
     <fieldset>
         <label for="nameField">Repo</label>
             <input type="text" name="name" value="<%= @name %>"
-                   placeholder="e.g. FRA"
+                   placeholder="Search repos..."
                    autofocus autocomplete="off" phx-debounce="500" />
 
-        <input class="button-primary" type="submit" value="Search Repos">
-        <input class="button-primary" type="submit" value="Clear">
+        <input class="button-primary" type="submit" value="Clear"/>
     </fieldset>
 </form>
 
@@ -15,6 +14,7 @@
 <table>
     <thead>
     <tr>
+        <th>Likes</th>
         <th>Repo name</th>
         <th>Link</th>
     </tr>
@@ -22,6 +22,19 @@
     <tbody>
     <%= for repo <- @repos do %>
     <tr>
+        <td>
+            <%= if repo.liked do %>
+                <form phx-submit="unlike_repo" phx-target="<%= repo.id %>">
+                    <input type="hidden" name="id" value="<%= repo.id %>">
+                    <input type="submit" value="Unlike">
+                </form>
+            <%= else %>
+            <form phx-submit="like_repo" phx-target="<%= repo.id %>">
+                <input type="hidden" name="id" value="<%= repo.id %>">
+                <input type="submit" value="Like">
+            </form>
+            <%= end %>
+        </td>
         <td><%= repo.name %></td>
         <td><%= link repo.link, to: repo.link, target: "_blank" %></td>
     </tr>

@@ -37,6 +37,10 @@ defmodule GithubBrowserLive.GitHub do
       %{
         name: repo["name"],
         link: repo["html_url"],
+        likes: 2,
+        id: repo["id"],
+        description: repo["description"],
+        liked: :true,
       }
     end)
   end
