@@ -16,11 +16,14 @@
     <%= for repo <- @repos do %>
         <%= card do %>
             <%= card_header do %>
-                <h2>Name: <%= repo.name %></h2>
+                <h2>Name: <%= repo.name %> Stars: <%= repo.stars %></h2>
+                <%= if repo.description != nil do %>
+                    <%= repo.description %>
+                <% end %>
             <% end %>
             <%= card_body do %>
                 <%= link repo.link, to: repo.link, target: "_blank" %>
-                <div>Likes: <%= repo.likes %></div>
+                <input class="button-primary fav" type="submit" value="Add to favourites" style="display: block"/>
             <% end %>
         <% end %>
     <% end %>

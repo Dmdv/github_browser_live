@@ -137,12 +137,12 @@
 }
 
 .card h2 {
-  margin: 0 0 18px 0;
-  font-family: "Bebas Neue";
+  font-family: "Bebas Neue", monospace;
   font-size: 1.9rem;
   letter-spacing: 0.06em;
   color: var(--title-color);
   transition: color 0.3s ease-out;
+  margin-bottom: 5px;
 }
 
 .card:hover {
@@ -160,6 +160,8 @@
   gap:20px;
 }
 
-/*.cont:hover {*/
-/*  opacity:0.3;*/
-/*}*/
+.fav {
+  display: inline-block;
+  margin-top: 5px;
+  margin-bottom: 5px
+}
