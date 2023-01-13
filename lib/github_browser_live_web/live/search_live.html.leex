@@ -11,34 +11,18 @@
 
 <%= unless @repos == [] do %>
 <h2>Search Results</h2>
-<table>
-    <thead>
-    <tr>
-        <th>Likes</th>
-        <th>Repo name</th>
-        <th>Link</th>
-    </tr>
-    </thead>
-    <tbody>
+
+<div class="cont">
     <%= for repo <- @repos do %>
-    <tr>
-        <td>
-            <%= if repo.liked do %>
-                <form phx-submit="unlike_repo" phx-target="<%= repo.id %>">
-                    <input type="hidden" name="id" value="<%= repo.id %>">
-                    <input type="submit" value="Unlike">
-                </form>
-            <%= else %>
-            <form phx-submit="like_repo" phx-target="<%= repo.id %>">
-                <input type="hidden" name="id" value="<%= repo.id %>">
-                <input type="submit" value="Like">
-            </form>
-            <%= end %>
-        </td>
-        <td><%= repo.name %></td>
-        <td><%= link repo.link, to: repo.link, target: "_blank" %></td>
-    </tr>
+        <%= card do %>
+            <%= card_header do %>
+                <h2>Name: <%= repo.name %></h2>
+            <% end %>
+            <%= card_body do %>
+                <%= link repo.link, to: repo.link, target: "_blank" %>
+                <div>Likes: <%= repo.likes %></div>
+            <% end %>
+        <% end %>
     <% end %>
-    </tbody>
-</table>
+</div>
 <% end %>

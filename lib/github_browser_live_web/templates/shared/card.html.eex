@@ -1,0 +1,5 @@
+<div class="card">
+    <div>
+        <%= @inner_content %>
+    </div>
+</div>

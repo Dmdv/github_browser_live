@@ -119,11 +119,47 @@
   100% { opacity: 0; }
 }
 
-.center {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
+
+.card {
+  --title-color: black;
+  background-color: ghostwhite;
+  border: 1px solid #bacdd8;
+  padding: 8px;
+  border-radius: 12px;
+  margin: 15px;
+  opacity:0.7;
+  box-shadow: 0 3px 10px 0 #aaa;
+}
+
+.card h2 {
+  margin: 0 0 18px 0;
+  font-family: "Bebas Neue";
+  font-size: 1.9rem;
+  letter-spacing: 0.06em;
+  color: var(--title-color);
+  transition: color 0.3s ease-out;
+}
+
+.card:hover {
+  opacity:1;
+  transform: scale(1.1);
+  transform-origin: center;
+  transition: transform 0.4s ease-in-out;
+}
+
+.cont {
+  max-width:600px;
+  max-height:350px;
+  justify-content:center;
+  align-items:center;
+  gap:20px;
+}
+
+/*.cont:hover {*/
+/*  opacity:0.3;*/
+/*}*/

@@ -47,6 +47,8 @@ defmodule GithubBrowserLiveWeb do
       use Phoenix.LiveView,
         layout: {GithubBrowserLiveWeb.LayoutView, "live.html"}
 
+      import GithubBrowserLiveWeb.SharedComponents
+
       unquote(view_helpers())
     end
   end

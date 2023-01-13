@@ -40,7 +40,7 @@ defmodule GithubBrowserLive.GitHub do
         likes: 2,
         id: repo["id"],
         description: repo["description"],
-        liked: :true,
+        liked: :false,
       }
     end)
   end
