@@ -50,6 +50,8 @@ defmodule GithubBrowserLiveWeb do
       import GithubBrowserLiveWeb.SharedComponents
 
       unquote(view_helpers())
+
+      import GithubBrowserLiveWeb.LiveHelpers
     end
   end
 

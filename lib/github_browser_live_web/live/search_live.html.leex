@@ -1,9 +1,9 @@
 <form phx-change="github_search">
     <fieldset>
-        <label for="nameField">Repo</label>
-            <input type="text" name="name" value="<%= @name %>"
-                   placeholder="Search repos..."
-                   autofocus autocomplete="off" phx-debounce="500" />
+        <label for="name">name</label>
+        <input id="name" type="text" name="name" value="<%= @name %>"
+               placeholder="Search repos..."
+               autofocus autocomplete="off" phx-debounce="500" />
 
         <input class="button-primary" type="submit" value="Clear"/>
     </fieldset>
@@ -23,7 +23,23 @@
             <% end %>
             <%= card_body do %>
                 <%= link repo.link, to: repo.link, target: "_blank" %>
-                <input class="button-primary fav" type="submit" value="Add to favourites" style="display: block"/>
+                <%= if repo.liked do %>
+                    <button class="button-primary fav"
+                            phx-click="save"
+                            phx-value-id="<%= repo.id %>"
+                            phx-value-action="unlike"
+                            style="display: block">
+                        Remove from favourites
+                    </button>
+                <% else %>
+                    <button class="button-primary fav"
+                            phx-click="save"
+                            phx-value-id="<%= repo.id %>"
+                            phx-value-action="like"
+                            style="display: block">
+                        Add to favourites
+                    </button>
+                <% end %>
             <% end %>
         <% end %>
     <% end %>

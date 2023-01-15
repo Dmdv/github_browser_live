@@ -51,7 +51,7 @@ defmodule GithubBrowserLive.Accounts.UserToken do
 
   The query returns the user found by the token, if any.
 
-  The token is valid if it matches the value in the database and it has
+  The token is valid if it matches the value in the database, and it has
   not expired (after @session_validity_in_days).
   """
   def verify_session_token_query(token) do

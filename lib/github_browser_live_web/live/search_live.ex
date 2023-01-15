@@ -4,6 +4,7 @@ defmodule GithubBrowserLiveWeb.SearchLive do
   require Logger
 
   def mount(_params, _session, socket) do
+    socket = assign_defaults(_session, socket)
     socket =
       socket
       |> assign(:name, "")
@@ -12,30 +13,19 @@ defmodule GithubBrowserLiveWeb.SearchLive do
     {:ok, socket}
   end
 
-  def handle_event(
-        "like_repo",
-        %{"id" => id},
-        socket) do
-    Logger.info("Liked " + id)
-    {:noreply, socket
-               |> put_flash(:info, "repo liked")}
+  def handle_event("save", %{"id" => id, "action" => "like"}, socket) do
+    Logger.info("Liked repo: #{id}")
+    Logger.info("Current user: #{socket.assigns.current_user.email}")
+    {:noreply, socket |> put_flash(:info, "Added to favourites: #{id}")}
   end
 
-  def handle_event(
-        "unlike_repo",
-        %{"id" => id},
-        socket) do
-    Logger.info("Unliked " + id)
-    {:noreply, socket
-               |> put_flash(:info, "repo unliked")}
+  def handle_event("save", %{"id" => id, "action" => "unlike"}, socket) do
+    Logger.info("Liked repo: #{id}")
+    Logger.info("Current user: #{socket.assigns.current_user.email}")
+    {:noreply, socket |> put_flash(:info, "Removed from favourites: #{id}")}
   end
 
-  def handle_event(
-        "github_search",
-        %{"name" => name},
-        socket
-      ) do
-
+  def handle_event("github_search", %{"name" => name}, socket) do
     if name == nil do
       socket =
         socket

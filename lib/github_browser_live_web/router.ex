@@ -22,6 +22,11 @@ defmodule GithubBrowserLiveWeb.Router do
 
     get "/", PageController, :index
     live "/guess", WrongLive
+  end
+
+  scope "/", GithubBrowserLiveWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
     live "/search", SearchLive
   end
 
