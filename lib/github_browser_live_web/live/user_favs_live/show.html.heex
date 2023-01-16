@@ -1,0 +1,31 @@
+<h1>Show User favs</h1>
+
+<%= if @live_action in [:edit] do %>
+  <.modal return_to={Routes.user_favs_show_path(@socket, :show, @user_favs)}>
+    <.live_component
+      module={GithubBrowserLiveWeb.UserFavsLive.FormComponent}
+      id={@user_favs.id}
+      title={@page_title}
+      action={@live_action}
+      user_favs={@user_favs}
+      return_to={Routes.user_favs_show_path(@socket, :show, @user_favs)}
+    />
+  </.modal>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>User:</strong>
+    <%= @user_favs.user_id %>
+  </li>
+
+  <li>
+    <strong>Repo:</strong>
+    <%= @user_favs.repo_id %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.user_favs_show_path(@socket, :edit, @user_favs), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.user_favs_index_path(@socket, :index) %></span>

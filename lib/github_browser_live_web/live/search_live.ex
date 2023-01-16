@@ -1,6 +1,7 @@
 defmodule GithubBrowserLiveWeb.SearchLive do
   use GithubBrowserLiveWeb, :live_view
   alias GithubBrowserLive.GitHub
+  alias GithubBrowserLive.Favs
   require Logger
 
   def mount(_params, _session, socket) do
@@ -14,14 +15,17 @@ defmodule GithubBrowserLiveWeb.SearchLive do
   end
 
   def handle_event("save", %{"id" => id, "action" => "like"}, socket) do
-    Logger.info("Liked repo: #{id}")
-    Logger.info("Current user: #{socket.assigns.current_user.email}")
+    Logger.info("Liked: Repo ID = #{id}, User ID: #{socket.assigns.current_user.email}")
+    Favs.create_user_favs(%{:repo_id => id, :user_id => socket.assigns.current_user.id})
+
     {:noreply, socket |> put_flash(:info, "Added to favourites: #{id}")}
   end
 
   def handle_event("save", %{"id" => id, "action" => "unlike"}, socket) do
-    Logger.info("Liked repo: #{id}")
-    Logger.info("Current user: #{socket.assigns.current_user.email}")
+    Logger.info("Unliked: Repo ID = #{id}, User ID: #{socket.assigns.current_user.email}")
+    Favs.delete_user_favs_by_userid_and_repo_id(id, socket.assigns.current_user.id)
+
+
     {:noreply, socket |> put_flash(:info, "Removed from favourites: #{id}")}
   end
 
