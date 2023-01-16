@@ -37,6 +37,10 @@ defmodule GithubBrowserLive.Favs do
   """
   def get_user_favs!(id), do: Repo.get!(UserFavs, id)
 
+  def get_user_favs_by_user_id(user_id) do
+    Repo.all(UserFavs, user_id: user_id)
+  end
+
   @doc """
   Creates a user_favs.
 
@@ -107,6 +111,21 @@ defmodule GithubBrowserLive.Favs do
     from f in UserFavs, where: f.user_id == ^user_id and f.repo_id == ^repo_id
   end
 
+#  def select_all_user_favs_by_userid(user_id) do
+#    Repo.all(from f in UserFavs, where: f.user_id == ^user_id)
+#  end
+
+  def count_user_favs(repo_id, user_id) do
+    user_favorites(repo_id, user_id)
+    |> Repo.aggregate(:count, :id)
+  end
+
+  def is_favorite?(user_id, repo_id) do
+    case Repo.one(user_favorites(user_id, repo_id)) do
+      nil -> false
+      _ -> true
+    end
+  end
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking user_favs changes.

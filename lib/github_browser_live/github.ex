@@ -1,5 +1,6 @@
 defmodule GithubBrowserLive.GitHub do
   use HTTPoison.Base
+  alias GithubBrowserLive.Favs
 
   def search_by_name_demo(""), do: []
   def search_by_name_demo(name) do
@@ -7,32 +8,34 @@ defmodule GithubBrowserLive.GitHub do
     |> Enum.filter(&String.starts_with?(&1.name, name))
   end
 
-  def search_by_name(""), do: []
+  def search_by_name(nil, ""), do: []
+  def search_by_name("", ""), do: []
+  def search_by_name(user_id, ""), do: []
 
-  def search_by_name(name) do
-    repos_name_url(name)
+  def search_by_name(user_id, name) do
+    repos_name_url(user_id, name)
   end
 
-  def search_by_name(name, per_page) do
-    repos_name_url(name, per_page)
+  def search_by_name(user_id, name, per_page) do
+    repos_name_url(user_id, name, per_page)
   end
 
-  def search_by_name(name, per_page, page) do
-    repos_name_url(name, per_page, page)
+  def search_by_name(user_id, name, per_page, page) do
+    repos_name_url(user_id, name, per_page, page)
   end
 
   def user(name) do
     get! "/users/#{name}"
   end
 
-  def repos_name_url(name, per_page \\ 5, page \\ 1, order \\ "desc")
+  def repos_name_url(user_id, name, per_page \\ 5, page \\ 1, order \\ "desc")
       when order in ["desc", "asc"] do
     repos(name, per_page, page, order)
-    |> select_name_and_url
+    |> select_name_and_url(user_id)
   end
 
-  def select_name_and_url(array) do
-    array
+  def select_name_and_url(user_id, array) do
+    array = array
     |> Enum.map(fn repo ->
       %{
         name: repo["name"],
@@ -43,7 +46,59 @@ defmodule GithubBrowserLive.GitHub do
         stars: repo["stargazers_count"]
       }
     end)
+
+    favs =
+      Favs.get_user_favs_by_user_id(user_id)
+      |> reduce_to_map_with_field(:id)
+
+    array
+    |> Enum.map(fn repo ->
+          if Map.has_key?(favs, repo.id) do
+            %{repo | liked: :true}
+          else
+            repo
+          end
+        end)
+
+#    select map from favs with key as user_id, value as repo_id do
+#      array
+#      |> Enum.map(fn repo ->
+#        if repo.id == repo_id do
+#          %{repo | liked: :true}
+#        else
+#          repo
+#        end
+#      end)
+#    end
+
+#    select map from favs with key <- array do
+#      %{key | liked: favs.repo_id == key.id}
+#    end
+
+#    |> Enum.map(fn repo ->
+#      case Favs.get_user_favs_by_userid_and_repo_id(repo.id, user_id) do
+#        nil ->
+#          repo
+#        _ ->
+#          Map.put(repo, :liked, :true)
+#      end
+#    end)
   end
+
+  def reduce_to_map_with_field(array, field) do
+    array
+    |> Enum.reduce(%{}, fn item, acc ->
+      Map.put(acc, item.field, item)
+    end)
+  end
+
+
+#  def convert_array_to_map(array) do
+#    Enum.reduce(array, %{}, fn {key, value}, acc ->
+#      Map.put(acc, key, value)
+#    end)
+#  end
+#
 
   def repos(name, per_page \\ 5, page \\ 1, order \\ "desc")
           when order in ["desc", "asc"] do

@@ -4,8 +4,8 @@ defmodule GithubBrowserLiveWeb.SearchLive do
   alias GithubBrowserLive.Favs
   require Logger
 
-  def mount(_params, _session, socket) do
-    socket = assign_defaults(_session, socket)
+  def mount(_params, session, socket) do
+    socket = assign_defaults(session, socket)
     socket =
       socket
       |> assign(:name, "")
@@ -16,20 +16,26 @@ defmodule GithubBrowserLiveWeb.SearchLive do
 
   def handle_event("save", %{"id" => id, "action" => "like"}, socket) do
     Logger.info("Liked: Repo ID = #{id}, User ID: #{socket.assigns.current_user.email}")
-    Favs.create_user_favs(%{:repo_id => id, :user_id => socket.assigns.current_user.id})
 
+    Favs.create_user_favs(%{:repo_id => id, :user_id => socket.assigns.current_user.id})
     {:noreply, socket |> put_flash(:info, "Added to favourites: #{id}")}
   end
 
   def handle_event("save", %{"id" => id, "action" => "unlike"}, socket) do
     Logger.info("Unliked: Repo ID = #{id}, User ID: #{socket.assigns.current_user.email}")
-    Favs.delete_user_favs_by_userid_and_repo_id(id, socket.assigns.current_user.id)
 
-
-    {:noreply, socket |> put_flash(:info, "Removed from favourites: #{id}")}
+    case Favs.delete_user_favs_by_userid_and_repo_id(id, socket.assigns.current_user.id) do
+      {:ok, _} ->
+        {:noreply, socket |> put_flash(:info, "Removed repo from favourites: #{id}")}
+      {:error, _} ->
+        {:noreply, socket |> put_flash(:warn, "Repo not found: #{id}")}
+    end
   end
 
   def handle_event("github_search", %{"name" => name}, socket) do
+    user_id = socket.assigns.current_user.id
+    Logger.info("Searching repo: #{name}, User ID: #{user_id}")
+
     if name == nil do
       socket =
         socket
