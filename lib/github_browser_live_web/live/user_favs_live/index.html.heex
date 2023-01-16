@@ -1,0 +1,39 @@
+<h1>Listing User favs</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <.modal return_to={Routes.user_favs_index_path(@socket, :index)}>
+    <.live_component
+      module={GithubBrowserLiveWeb.UserFavsLive.FormComponent}
+      id={@user_favs.id || :new}
+      title={@page_title}
+      action={@live_action}
+      user_favs={@user_favs}
+      return_to={Routes.user_favs_index_path(@socket, :index)}
+    />
+  </.modal>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Repo</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="user_favs">
+    <%= for user_favs <- @user_favs_collection do %>
+      <tr id={"user_favs-#{user_favs.id}"}>
+        <td><%= user_favs.repo_id %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.user_favs_show_path(@socket, :show, user_favs) %></span>
+          <span><%= live_patch "Edit", to: Routes.user_favs_index_path(@socket, :edit, user_favs) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: user_favs.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New User favs", to: Routes.user_favs_index_path(@socket, :new) %></span>

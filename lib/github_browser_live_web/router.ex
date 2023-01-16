@@ -28,6 +28,13 @@ defmodule GithubBrowserLiveWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
 
     live "/search", SearchLive
+
+    live "/user_favs", UserFavsLive.Index, :index
+    live "/user_favs/new", UserFavsLive.Index, :new
+    live "/user_favs/:id/edit", UserFavsLive.Index, :edit
+
+    live "/user_favs/:id", UserFavsLive.Show, :show
+    live "/user_favs/:id/show/edit", UserFavsLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.
