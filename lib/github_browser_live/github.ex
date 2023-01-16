@@ -1,6 +1,7 @@
 defmodule GithubBrowserLive.GitHub do
   use HTTPoison.Base
   alias GithubBrowserLive.Favs
+  require Logger
 
   def search_by_name_demo(""), do: []
   def search_by_name_demo(name) do
@@ -9,8 +10,7 @@ defmodule GithubBrowserLive.GitHub do
   end
 
   def search_by_name(nil, ""), do: []
-  def search_by_name("", ""), do: []
-  def search_by_name(user_id, ""), do: []
+  def search_by_name(_, ""), do: []
 
   def search_by_name(user_id, name) do
     repos_name_url(user_id, name)
@@ -34,7 +34,7 @@ defmodule GithubBrowserLive.GitHub do
     |> select_name_and_url(user_id)
   end
 
-  def select_name_and_url(user_id, array) do
+  def select_name_and_url(array, user_id) do
     array = array
     |> Enum.map(fn repo ->
       %{
@@ -49,7 +49,9 @@ defmodule GithubBrowserLive.GitHub do
 
     favs =
       Favs.get_user_favs_by_user_id(user_id)
-      |> reduce_to_map_with_field(:id)
+      |> reduce_to_map_with_field(&(&1.repo_id))
+
+    Logger.info("Favs: #{inspect(favs)}")
 
     array
     |> Enum.map(fn repo ->
@@ -85,20 +87,12 @@ defmodule GithubBrowserLive.GitHub do
 #    end)
   end
 
-  def reduce_to_map_with_field(array, field) do
+  def reduce_to_map_with_field(array, func) do
     array
     |> Enum.reduce(%{}, fn item, acc ->
-      Map.put(acc, item.field, item)
+      Map.put(acc, func.(item), item)
     end)
   end
-
-
-#  def convert_array_to_map(array) do
-#    Enum.reduce(array, %{}, fn {key, value}, acc ->
-#      Map.put(acc, key, value)
-#    end)
-#  end
-#
 
   def repos(name, per_page \\ 5, page \\ 1, order \\ "desc")
           when order in ["desc", "asc"] do

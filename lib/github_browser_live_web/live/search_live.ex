@@ -46,7 +46,7 @@ defmodule GithubBrowserLiveWeb.SearchLive do
       socket =
         socket
         |> assign(:name, name)
-        |> assign(:repos, GitHub.search_by_name(name))
+        |> assign(:repos, GitHub.search_by_name(user_id, name))
       {:noreply, socket}
     end
   end
