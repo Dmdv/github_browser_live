@@ -23,23 +23,14 @@
             <% end %>
             <%= card_body do %>
                 <%= link repo.link, to: repo.link, target: "_blank" %>
-                <%= if repo.liked do %>
-                    <button class="button-primary fav"
-                            phx-click="save"
-                            phx-value-id="<%= repo.id %>"
-                            phx-value-action="unlike"
-                            style="display: block">
-                        Remove from favourites
-                    </button>
-                <% else %>
-                    <button class="button-primary fav"
-                            phx-click="save"
-                            phx-value-id="<%= repo.id %>"
-                            phx-value-action="like"
-                            style="display: block">
-                        Add to favourites
-                    </button>
-                <% end %>
+                <button id="<%= repo.id %>"
+                        class="button-primary fav"
+                        phx-click="save"
+                        phx-value-id="<%= repo.id %>"
+                        phx-value-action="<%= if repo.liked do %>unlike<% else %>like<% end %>"
+                        style="display: block">
+                <%= if repo.liked do %>Remove<% else %>Add<% end %>
+                </button>
             <% end %>
         <% end %>
     <% end %>

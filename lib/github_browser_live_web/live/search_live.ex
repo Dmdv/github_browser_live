@@ -18,7 +18,13 @@ defmodule GithubBrowserLiveWeb.SearchLive do
     Logger.info("Liked: Repo ID = #{id}, User ID: #{socket.assigns.current_user.email}")
 
     Favs.create_user_favs(%{:repo_id => id, :user_id => socket.assigns.current_user.id})
-    {:noreply, socket |> put_flash(:info, "Added to favourites: #{id}")}
+
+    socket =
+      socket
+      |> assign(:button_text, "Liked")
+      |> put_flash(:info, "Added to favourites: #{id}")
+
+    {:noreply, socket}
   end
 
   def handle_event("save", %{"id" => id, "action" => "unlike"}, socket) do

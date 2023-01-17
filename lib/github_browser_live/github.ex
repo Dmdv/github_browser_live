@@ -84,7 +84,6 @@ defmodule GithubBrowserLive.GitHub do
     |> Enum.filter(&String.starts_with?(&1.name, name))
   end
 
-
   def list_demo do
     [
       %{name: "Berlin Brandenburg", link: "BER"},
