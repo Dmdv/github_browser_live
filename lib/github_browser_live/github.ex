@@ -3,13 +3,6 @@ defmodule GithubBrowserLive.GitHub do
   alias GithubBrowserLive.Favs
   require Logger
 
-  def search_by_name_demo(""), do: []
-  def search_by_name_demo(name) do
-    list_demo()
-    |> Enum.filter(&String.starts_with?(&1.name, name))
-  end
-
-  def search_by_name(nil, ""), do: []
   def search_by_name(_, ""), do: []
 
   def search_by_name(user_id, name) do
@@ -35,6 +28,8 @@ defmodule GithubBrowserLive.GitHub do
   end
 
   def select_name_and_url(array, user_id) do
+
+    # build a list of repos with name and url
     array = array
     |> Enum.map(fn repo ->
       %{
@@ -47,12 +42,14 @@ defmodule GithubBrowserLive.GitHub do
       }
     end)
 
+    # one round-trip to the database to get all favorites for the current user
     favs =
       Favs.get_user_favs_by_user_id(user_id)
       |> reduce_to_map_with_field(&(&1.repo_id))
 
     Logger.info("Favs: #{inspect(favs)}")
 
+    # now we can check if the repo is a favorite
     array
     |> Enum.map(fn repo ->
           if Map.has_key?(favs, repo.id) do
@@ -62,36 +59,6 @@ defmodule GithubBrowserLive.GitHub do
           end
         end)
 
-#    select map from favs with key as user_id, value as repo_id do
-#      array
-#      |> Enum.map(fn repo ->
-#        if repo.id == repo_id do
-#          %{repo | liked: :true}
-#        else
-#          repo
-#        end
-#      end)
-#    end
-
-#    select map from favs with key <- array do
-#      %{key | liked: favs.repo_id == key.id}
-#    end
-
-#    |> Enum.map(fn repo ->
-#      case Favs.get_user_favs_by_userid_and_repo_id(repo.id, user_id) do
-#        nil ->
-#          repo
-#        _ ->
-#          Map.put(repo, :liked, :true)
-#      end
-#    end)
-  end
-
-  def reduce_to_map_with_field(array, func) do
-    array
-    |> Enum.reduce(%{}, fn item, acc ->
-      Map.put(acc, func.(item), item)
-    end)
   end
 
   def repos(name, per_page \\ 5, page \\ 1, order \\ "desc")
@@ -109,6 +76,15 @@ defmodule GithubBrowserLive.GitHub do
     |> dict_to_atoms
   end
 
+  # Demo
+
+  def search_by_name_demo(""), do: []
+  def search_by_name_demo(name) do
+    list_demo()
+    |> Enum.filter(&String.starts_with?(&1.name, name))
+  end
+
+
   def list_demo do
     [
       %{name: "Berlin Brandenburg", link: "BER"},
@@ -120,7 +96,14 @@ defmodule GithubBrowserLive.GitHub do
     ]
   end
 
-  ## Helpers
+  ## Enum Helpers
+
+  def reduce_to_map_with_field(array, func) do
+    array
+    |> Enum.reduce(%{}, fn item, acc ->
+      Map.put(acc, func.(item), item)
+    end)
+  end
 
   def dict_to_atoms(dict) do
     Enum.map(dict, fn {k, v} -> {String.to_atom(k), v} end)
