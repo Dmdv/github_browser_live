@@ -21,7 +21,6 @@ defmodule GithubBrowserLiveWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    live "/guess", WrongLive
   end
 
   scope "/", GithubBrowserLiveWeb do
