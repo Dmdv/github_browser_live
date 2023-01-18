@@ -81,5 +81,4 @@ https://www.one-tab.com/page/JzAmhgz_QT-bZ-Oin-SiRw
 https://www.one-tab.com/page/3XFvXs7iRO-toxj8Fo1Q1Q
 
 ## TODO
-1. Fix removing links
-2. Implement a view with links count and list of links
+1. Implement a view with links count and list of links

@@ -39,12 +39,35 @@ defmodule GithubBrowserLiveWeb.SearchLive do
   def handle_event("save", %{"id" => id, "action" => "unlike"}, socket) do
     Logger.info("Unliked Event: Repo ID = #{id}, User ID: #{socket.assigns.current_user.email}")
 
-    case Favs.delete_user_favs_by_userid_and_repo_id(id, socket.assigns.current_user.id) do
-      {:ok, _} ->
-        {:noreply, socket |> put_flash(:info, "Removed repo from favourites: #{id}")}
-      {:error, _} ->
-        {:noreply, socket |> put_flash(:warn, "Repo not found: #{id}")}
+    flash =
+      case Favs.delete_user_favs_by_userid_and_repo_id(socket.assigns.current_user.id, id) do
+      :ok ->
+        {:info, "Removed repo from favourites: #{id}"}
+      :error ->
+        {:warn, "Error: #{id}"}
+      :not_found ->
+        {:warn, "Repo not found: #{id}"}
     end
+
+    repos =
+      socket.assigns.repos
+      |> Enum.map(fn repo ->
+      if to_string(repo.id) == to_string(id) do
+        %{repo | liked: :false}
+      else
+        repo
+      end
+    end)
+
+    {t, message} = flash
+
+    socket =
+      socket
+      |> assign(:repos, repos)
+      |> put_flash(t, message)
+
+    {:noreply, socket}
+
   end
 
   def handle_event("github_search", %{"name" => name}, socket) do
