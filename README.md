@@ -1,6 +1,6 @@
 # GithubBrowserLive
 
-![img_1.png](img_1.png)
+![img.png](img.png)
 
 To start your Phoenix server:
 
