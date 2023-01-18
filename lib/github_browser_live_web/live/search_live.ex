@@ -19,14 +19,9 @@ defmodule GithubBrowserLiveWeb.SearchLive do
 
     Favs.create_user_favs(%{:repo_id => id, :user_id => socket.assigns.current_user.id})
 
-    repos = socket.assigns.repos
-      |> Enum.map(fn repo ->
-          if to_string(repo.id) == to_string(id) do
-            %{repo | liked: :true}
-          else
-            repo
-          end
-        end)
+    repos =
+      socket.assigns.repos
+      |> update_liked_status(id, :true)
 
     socket =
       socket
@@ -51,13 +46,7 @@ defmodule GithubBrowserLiveWeb.SearchLive do
 
     repos =
       socket.assigns.repos
-      |> Enum.map(fn repo ->
-      if to_string(repo.id) == to_string(id) do
-        %{repo | liked: :false}
-      else
-        repo
-      end
-    end)
+      |> update_liked_status(id, :false)
 
     {t, message} = flash
 
@@ -94,6 +83,18 @@ defmodule GithubBrowserLiveWeb.SearchLive do
   def handle_info(:schedule_clear_flash, socket) do
     :timer.sleep(5000)
     {:noreply, clear_flash(socket)}
+  end
+
+  # function to update liked status of repo from repo array
+def update_liked_status(repos, id, like) do
+    repos
+    |> Enum.map(fn repo ->
+      if to_string(repo.id) == to_string(id) do
+        %{repo | liked: like}
+      else
+        repo
+      end
+    end)
   end
 
 end
