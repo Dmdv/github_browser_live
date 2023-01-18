@@ -81,6 +81,5 @@ https://www.one-tab.com/page/JzAmhgz_QT-bZ-Oin-SiRw
 https://www.one-tab.com/page/3XFvXs7iRO-toxj8Fo1Q1Q
 
 ## TODO
-1. Update button text when linked is clicked
-2. Fix removing links
-3. Implement page with links browser
+1. Fix removing links
+2. Implement a view with links count and list of links
