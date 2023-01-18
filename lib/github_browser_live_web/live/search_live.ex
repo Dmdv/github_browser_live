@@ -15,20 +15,29 @@ defmodule GithubBrowserLiveWeb.SearchLive do
   end
 
   def handle_event("save", %{"id" => id, "action" => "like"}, socket) do
-    Logger.info("Liked: Repo ID = #{id}, User ID: #{socket.assigns.current_user.email}")
+    Logger.info("Liked Event: Repo ID = #{id}, User ID: #{socket.assigns.current_user.email}")
 
     Favs.create_user_favs(%{:repo_id => id, :user_id => socket.assigns.current_user.id})
 
+    repos = socket.assigns.repos
+      |> Enum.map(fn repo ->
+          if to_string(repo.id) == to_string(id) do
+            %{repo | liked: :true}
+          else
+            repo
+          end
+        end)
+
     socket =
       socket
-      |> assign(:button_text, "Liked")
+      |> assign(:repos, repos)
       |> put_flash(:info, "Added to favourites: #{id}")
 
     {:noreply, socket}
   end
 
   def handle_event("save", %{"id" => id, "action" => "unlike"}, socket) do
-    Logger.info("Unliked: Repo ID = #{id}, User ID: #{socket.assigns.current_user.email}")
+    Logger.info("Unliked Event: Repo ID = #{id}, User ID: #{socket.assigns.current_user.email}")
 
     case Favs.delete_user_favs_by_userid_and_repo_id(id, socket.assigns.current_user.id) do
       {:ok, _} ->
